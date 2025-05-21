@@ -1,0 +1,23 @@
+#map {
+    height: 100vh;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#controls {
+    padding: 1rem;
+}
+
+#controls input {
+    margin-left: 1rem;
+    margin-right: 0.2rem;
+}
+
+#latlon {
+    padding-left: 2rem;
+    padding-bottom: 1rem;
+}

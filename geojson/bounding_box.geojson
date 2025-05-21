@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "strata",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": "0817A13B11380DC59C40", "Name": "iit-w-sanjay-van", "description": null, "timestamp": null, "begin": null, "end": null, "altitudeMode": null, "tessellate": -1, "extrude": 0, "visibility": -1, "drawOrder": null, "icon": null }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 77.1671869798015, 28.52135787210274, 0.0 ], [ 77.181155122140822, 28.521811030788101, 0.0 ], [ 77.194229405168485, 28.530093191381511, 0.0 ], [ 77.20252935120304, 28.544305930429442, 0.0 ], [ 77.183378807816538, 28.550892989125359, 0.0 ], [ 77.172934592427197, 28.53916341071762, 0.0 ], [ 77.169726189158624, 28.52976049953525, 0.0 ], [ 77.1671869798015, 28.52135787210274, 0.0 ] ] ] } }
+]
+}

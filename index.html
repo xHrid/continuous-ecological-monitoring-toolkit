@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sanjay Van Monitoring</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./leaflet/leaflet.css" />
+</head>
+
+<body>
+    <div id="controls">
+        <label><input type="radio" name="geojsonOption" value="clear" checked />None</label>
+        <label><input type="radio" name="geojsonOption" value="cp2.geojson" />2 Cluster</label>
+        <label><input type="radio" name="geojsonOption" value="cp3.geojson" />3 Cluster</label>
+        <label><input type="radio" name="geojsonOption" value="cp4.geojson" />4 Cluster</label>
+    </div>
+    <div id="latlon"><label>Lat Long</label></div>
+    <div id="map"></div>
+    <script src="./leaflet/leaflet.js"></script>
+    <script src="./app.js"></script>
+</body>
+
+</html>
