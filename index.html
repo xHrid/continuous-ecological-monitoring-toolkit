@@ -13,9 +13,53 @@
         <label><input type="radio" name="geojsonOption" value="cp2.geojson" />2 Cluster</label>
         <label><input type="radio" name="geojsonOption" value="cp3.geojson" />3 Cluster</label>
         <label><input type="radio" name="geojsonOption" value="cp4.geojson" />4 Cluster</label>
+        <!-- Trigger Button -->
+        <button id="open-form">Add Spot</button>
+
+        <!-- Popup Form -->
+
     </div>
+    <!-- Trigger Button -->
+
+    <!-- Simple Popup Form -->
+    <div id="popup-form" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <form id="spot-form">
+                <input type="text" name="name" placeholder="Spot Name" />
+                <input type="text" name="birds" placeholder="Birds Seen" />
+                <textarea name="description" placeholder="Description"></textarea>
+
+                <label for="image">Capture Image:</label>
+                <input type="file" name="image" accept="image/*" capture="environment" />
+
+                <!-- Placeholder for audio recorder (step 3) -->
+
+                <button type="submit">Submit</button>
+            </form>
+            <div id="status"></div>
+
+        </div>
+    </div>
+
     <div id="latlon"><label>Lat Long</label></div>
     <div id="map"></div>
+    <form action=""></form>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-analytics.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDddPHvCMiAZui6RhYkUz69rQ69QS5aLIc",
+            authDomain: "mapnotes-c57fd.firebaseapp.com",
+            projectId: "mapnotes-c57fd",
+            storageBucket: "mapnotes-c57fd.firebasestorage.app",
+            messagingSenderId: "552347033390",
+            appId: "1:552347033390:web:4e530d192f4c6aa3dfe4bf",
+            measurementId: "G-KXQ6JVVPTS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
     <script src="./leaflet/leaflet.js"></script>
     <script src="./app.js"></script>
 </body>

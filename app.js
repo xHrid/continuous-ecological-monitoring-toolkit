@@ -21,13 +21,12 @@ fetch("./geojson/bounding_box.geojson")
     map.fitBounds(bounds, { padding: [20, 20] });
     map.setMaxBounds(bounds);
     const initialZoom = Math.min(17, Math.max(15, map.getZoom()));
-    map.setZoom(initialZoom);    
+    map.setZoom(initialZoom);
   });
 
-
 L.tileLayer("./tiles/{z}/{x}/{y}.png", {
-  maxZoom: 17,  
-  minZoom: 15,  
+  maxZoom: 17,
+  minZoom: 15,
   noWrap: true,
   errorTileUrl: "./leaflet/images/white_box.png",
 }).addTo(map);
@@ -36,17 +35,16 @@ let clusterLayer = null;
 
 /*A function to load the stratification */
 function loadStratification(filename) {
-
-  if (filename == 'clear'){
+  if (filename == "clear") {
     map.removeLayer(clusterLayer);
-    return
+    return;
   }
   colors = ["red", "blue", "green", "orange", "purple", "brown"];
 
   if (filename == "cp4.geojson")
     colors = ["green", "red", "blue", "orange", "purple", "brown"];
 
-  filename = './geojson/' + filename
+  filename = "./geojson/" + filename;
   fetch(filename)
     .then((res) => res.json())
     .then((data) => {
@@ -69,21 +67,23 @@ function loadStratification(filename) {
     });
 }
 
-document.querySelectorAll('input[name="geojsonOption"]').forEach(radio => {
-  radio.addEventListener('change', () => {
+document.querySelectorAll('input[name="geojsonOption"]').forEach((radio) => {
+  radio.addEventListener("change", () => {
     if (radio.checked) {
       loadStratification(radio.value);
     }
   });
 });
 
-const latlon_label = document.querySelector('#latlon label');
+const latlon_label = document.querySelector("#latlon label");
 
 map.locate({ watch: true, enableHighAccuracy: true });
 
-let currentMarker = null, currentCircle = null, firstFix = true;
+let currentMarker = null,
+  currentCircle = null,
+  firstFix = true;
 
-map.on('locationfound', e => {
+map.on("locationfound", (e) => {
   const lat = e.latitude || e.latlng.lat;
   const lon = e.longitude || e.latlng.lng;
 
@@ -100,3 +100,32 @@ map.on('locationfound', e => {
     firstFix = false;
   }
 });
+
+document.getElementById("open-form").onclick = () => {
+  document.getElementById("popup-form").style.display = "flex";
+};
+
+document.getElementById("close-form").onclick = () => {
+  document.getElementById("popup-form").style.display = "none";
+};
+
+document.getElementById("spot-form").onsubmit = async function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const name = form.name.value.trim();
+  const birds = form.birds.value.trim();
+  const desc = form.description.value.trim();
+
+  if (!name && !birds && !desc) {
+    document.getElementById("status").textContent =
+      "Please fill at least one field.";
+    return;
+  }
+
+  const formData = new FormData(form);
+
+  // Add lat/lon and timestamp in later steps
+
+  document.getElementById("status").textContent = "Form is ready to submit!";
+};
