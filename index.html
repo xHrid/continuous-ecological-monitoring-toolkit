@@ -20,6 +20,10 @@
         <label class="spot-toggle">
             <input type="checkbox" id="display-spots"> Show Spots
         </label>
+        <div class="route-toggle">
+            <input type="checkbox" id="show-routes-toggle">
+            <label for="show-routes-toggle">Display Saved Routes</label>
+        </div>
         <div class="tracking-controls" style="display: inline;">
             <button id="start-tracking">Start Tracking</button>
             <button id="stop-tracking">Stop Tracking</button>
@@ -51,6 +55,23 @@
             </form>
             <div id="status"></div>
 
+        </div>
+    </div>
+
+    <div id="save-route-dialog" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Save Route</h3>
+            <form id="route-form">
+                <div>
+                    <label for="route-name">Route Name (optional):</label>
+                    <input type="text" id="route-name" placeholder="Morning Walk">
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 
