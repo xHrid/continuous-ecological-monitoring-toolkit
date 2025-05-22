@@ -5,7 +5,6 @@ let isTracking = false;
 function startTracking() {
   isTracking = true;
   routePoints = [];
-  map.locate({ watch: true, enableHighAccuracy: true });
 }
 
 function stopTracking() {
@@ -64,4 +63,14 @@ map.on("locationfound", (e) => {
 
   // Optional: Pan map to follow user
   map.setView(newPoint);
+});
+
+
+
+document.getElementById('start-tracking').addEventListener('click', () => {
+  startTracking();
+});
+
+document.getElementById('stop-tracking').addEventListener('click', () => {
+  stopTracking();
 });
