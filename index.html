@@ -32,7 +32,13 @@
                 <label for="image">Capture Image:</label>
                 <input type="file" name="image" accept="image/*" capture="environment" />
 
-                <!-- Placeholder for audio recorder (step 3) -->
+                <div id="audio-section">
+                    <p>Audio Recording:</p>
+                    <button type="button" id="start-recording">Start Recording</button>
+                    <button type="button" id="stop-recording" disabled>Stop</button>
+                    <p id="recording-status"></p>
+                </div>
+
 
                 <button type="submit">Submit</button>
             </form>

@@ -109,23 +109,79 @@ document.getElementById("close-form").onclick = () => {
   document.getElementById("popup-form").style.display = "none";
 };
 
-document.getElementById("spot-form").onsubmit = async function (e) {
+let mediaRecorder;
+let audioChunks = [];
+let audioBlob = null;
+
+const startBtn = document.getElementById('start-recording');
+const stopBtn = document.getElementById('stop-recording');
+const statusText = document.getElementById('recording-status');
+
+startBtn.onclick = async () => {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert("Audio recording not supported on this browser.");
+    return;
+  }
+
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  mediaRecorder = new MediaRecorder(stream);
+  audioChunks = [];
+
+  mediaRecorder.ondataavailable = e => {
+    audioChunks.push(e.data);
+  };
+
+  mediaRecorder.onstop = () => {
+    audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+    statusText.textContent = "Recording complete.";
+  };
+
+  mediaRecorder.start();
+  statusText.textContent = "Recording...";
+  startBtn.disabled = true;
+  stopBtn.disabled = false;
+};
+
+stopBtn.onclick = () => {
+  mediaRecorder.stop();
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
+};
+
+document.getElementById('spot-form').onsubmit = async function(e) {
   e.preventDefault();
 
   const form = e.target;
   const name = form.name.value.trim();
   const birds = form.birds.value.trim();
   const desc = form.description.value.trim();
+  const image = form.image.files[0];
 
-  if (!name && !birds && !desc) {
-    document.getElementById("status").textContent =
-      "Please fill at least one field.";
+  if (!name && !birds && !desc && !image && !audioBlob) {
+    document.getElementById('status').textContent = "Please fill at least one field.";
     return;
   }
 
   const formData = new FormData(form);
 
-  // Add lat/lon and timestamp in later steps
+  if (audioBlob) {
+    formData.append('audio', audioBlob, 'recording.webm');
+  }
 
-  document.getElementById("status").textContent = "Form is ready to submit!";
+  // In next step, add location and timestamp here
+
+  // Send data
+  const res = await fetch('/api/add-spot', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (res.ok) {
+    alert("Spot submitted!");
+    form.reset();
+    document.getElementById('recording-status').textContent = '';
+    audioBlob = null;
+  } else {
+    alert("Error submitting form.");
+  }
 };
