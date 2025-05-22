@@ -20,6 +20,10 @@
         <label class="spot-toggle">
             <input type="checkbox" id="display-spots"> Show Spots
         </label>
+        <div class="tracking-controls" style="display: inline;">
+            <button id="start-tracking">Start Tracking</button>
+            <button id="stop-tracking">Stop Tracking</button>
+        </div>
 
     </div>
     <!-- Simple Popup Form -->
@@ -30,7 +34,7 @@
                 <input type="text" name="birds" placeholder="Birds Seen" />
                 <textarea name="description" placeholder="Description"></textarea>
 
-                <!-- <label for="image">Capture Image:</label>
+                <label for="image">Capture Image:</label>
                 <input type="file" name="image" accept="image/*" capture="environment" />
 
                 <div id="audio-section">
@@ -39,7 +43,8 @@
                     <button type="button" id="btnStop" disabled>Stop Recording</button>
                     <audio id="audioPlayback" controls></audio>
                 </div>
- -->
+
+
 
                 <button type="submit">Submit</button>
                 <button type="button" id="close-form">cancle</button>
@@ -109,7 +114,10 @@
         };
     </script>
     <script src="./leaflet/leaflet.js"></script>
+    <script src="./map.js"></script>
+    <script src="./route.js"></script>
     <script src="./app.js"></script>
+    <script src="./spots.js"></script>
 </body>
 
 </html>
