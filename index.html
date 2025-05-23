@@ -3,58 +3,76 @@
 
 <head>
     <title>Sanjay Van Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./control_style.css" />
+    <link rel="stylesheet" href="spot_popup.css" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./leaflet/leaflet.css" />
 </head>
 
 <body>
-    <div id="controls">
-        <div id="latlon"><label>Lat Long</label></div>
+    <!-- Hamburger Button -->
+    <button id="menu-toggle">☰</button>
 
-        <label><input type="radio" name="geojsonOption" value="clear" checked />None</label>
-        <label><input type="radio" name="geojsonOption" value="cp2_vectorize.geojson" />2 Cluster</label>
-        <label><input type="radio" name="geojsonOption" value="cp3.geojson" />3 Cluster</label>
-        <label><input type="radio" name="geojsonOption" value="cp4.geojson" />4 Cluster</label>
-        <!-- Trigger Button -->
-        <button id="open-form">Add Spot</button>
-        <label class="spot-toggle">
-            <input type="checkbox" id="display-spots"> Show Spots
-        </label>
-        <div class="route-toggle">
-            <input type="checkbox" id="show-routes-toggle">
-            <label for="show-routes-toggle">Display Saved Routes</label>
+    <!-- Sidebar Menu -->
+    <div id="controls" class="open">
+        <div class="div-label" id="radio-label">Stratification</div>
+        <div class="control radios_div">
+            <label><input type="radio" name="geojsonOption" value="clear" checked />None</label>
+            <label><input type="radio" name="geojsonOption" value="cp2_vectorize.geojson" />2 Cluster</label>
+            <label><input type="radio" name="geojsonOption" value="cp3.geojson" />3
+                Cluster</label>
+            <label><input type="radio" name="geojsonOption" value="cp4.geojson" />4
+                Cluster</label>
         </div>
-        <div class="tracking-controls" style="display: inline;">
-            <button id="start-tracking">Start Tracking</button>
-            <button id="stop-tracking">Stop Tracking</button>
-        </div>
+        <div class="control">
+            <div class="div-label">
+                Spots
+                <img src="./images/spots-image.png" alt="Spots Icon" class="icon-inline" />
+            </div>
 
+            <button id="open-form">Add</button>
+            <label class="spot-toggle">
+                <input type="checkbox" id="display-spots" /> Show
+            </label>
+        </div>
+        <div class="control">
+            <div class="div-label">
+                Routes
+                <img src="./images/trail.png" alt="Routes Icon" class="icon-inline" />
+            </div>
+            <button id="toggle-tracking">Record</button>
+            <label for="show-routes-toggle">
+                <input type="checkbox" id="show-routes-toggle" /> Show
+            </label>
+        </div>
     </div>
+
+    <div id="latlon"><label>Lat Long</label></div>
+
     <!-- Simple Popup Form -->
     <div id="popup-form" class="popup-overlay" style="display: none;">
-        <div class="popup-content">
+        <div class="popup-content" >
             <form id="spot-form">
                 <input type="text" name="name" placeholder="Spot Name" />
                 <input type="text" name="birds" placeholder="Birds Seen" />
                 <textarea name="description" placeholder="Description"></textarea>
 
-                <label for="image">Capture Image:</label>
-                <input type="file" name="image" accept="image/*" capture="environment" />
-
-                <div id="audio-section">
-                    <p>Audio Recording:</p>
-                    <button type="button" id="btnStart">Start Recording</button>
-                    <button type="button" id="btnStop" disabled>Stop Recording</button>
-                    <audio id="audioPlayback" controls></audio>
+                <div class="media-controls">
+                    <label for="image-upload" class="custom-upload">
+                        <img src="./images/dslr-camera.png" alt="Routes Icon" class="camera-icon" />
+                    </label>
+                    <input type="file" id="image-upload" name="image" accept="image/*" capture="environment"
+                        style="display: none;" />
+                    <label id="audio-toggle" class="custom-upload">
+                        <img src="./images/mic.png" alt="Audio Icon" class="camera-icon" />
+                    </label>
+                    <audio id="audioPlayback" controls class="audio-player"></audio>
                 </div>
-
-
-
-                <button type="submit">Submit</button>
-                <button type="button" id="close-form">cancle</button>
+                <button type="submit" class="popup-btn">Submit</button>
+                <button type="button" id="close-form" class="popup-btn">cancle</button>
             </form>
             <div id="status"></div>
-
         </div>
     </div>
 
@@ -65,7 +83,7 @@
             <form id="route-form">
                 <div>
                     <label for="route-name">Route Name (optional):</label>
-                    <input type="text" id="route-name" placeholder="Morning Walk">
+                    <input type="text" id="route-name" placeholder="Morning Walk" />
                 </div>
                 <div class="button-group">
                     <button type="submit" class="save-btn">Save</button>
@@ -93,14 +111,14 @@
             collection,
             addDoc,
             getDocs,
-            serverTimestamp
+            serverTimestamp,
         } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js";
 
         import {
             getStorage,
             ref,
             uploadBytes,
-            getDownloadURL
+            getDownloadURL,
         } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -110,7 +128,7 @@
             storageBucket: "mapnotes-c57fd.firebasestorage.app",
             messagingSenderId: "552347033390",
             appId: "1:552347033390:web:4e530d192f4c6aa3dfe4bf",
-            measurementId: "G-KXQ6JVVPTS"
+            measurementId: "G-KXQ6JVVPTS",
         };
 
         // Initialize Firebase
@@ -131,7 +149,7 @@
             getDocs,
             ref,
             uploadBytes,
-            getDownloadURL
+            getDownloadURL,
         };
     </script>
     <script src="./leaflet/leaflet.js"></script>

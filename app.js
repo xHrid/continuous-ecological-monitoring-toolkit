@@ -1,3 +1,18 @@
+const imageInput = document.getElementById("image-upload");
+const imageLabel = document.querySelector("label[for='image-upload']");
+
+imageInput.addEventListener("change", () => {
+  if (imageInput.files.length > 0) {
+    imageLabel.classList.add("selected");
+  } else {
+    imageLabel.classList.remove("selected");
+  }
+});
+
+
+document.getElementById('menu-toggle').addEventListener('click', () => {
+  document.getElementById('controls').classList.toggle('open');
+});
 
 document.getElementById("open-form").onclick = () => {
   map.locate({ watch: true, enableHighAccuracy: true });
@@ -12,47 +27,39 @@ let constrainsObj = {
   audio: true,
   video: false,
 };
-const startBtn = document.getElementById("btnStart");
-const stopBtn = document.getElementById("btnStop");
+const audioToggle = document.getElementById("audio-toggle");
 const audioPlayback = document.getElementById("audioPlayback");
 
 let mediaRecorder;
 let audioChunks = [];
-let audioBlob = null;
+let isRecording = false;
 
-startBtn.addEventListener("click", async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+audioToggle.addEventListener("click", async () => {
+  if (!isRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
 
-    mediaRecorder = new MediaRecorder(stream);
-    audioChunks = [];
+      mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
 
-    mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        audioPlayback.src = URL.createObjectURL(audioBlob);
+        stream.getTracks().forEach((track) => track.stop());
+      };
 
-    mediaRecorder.onstop = () => {
-      audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-      const audioURL = URL.createObjectURL(audioBlob);
-      audioPlayback.src = audioURL;
-
-      mediaRecorder.stream.getTracks().forEach((track) => track.stop());
-    };
-
-    mediaRecorder.start();
-    console.log("Recording started");
-
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
-  } catch (err) {
-    console.error("Error accessing microphone:", err);
-  }
-});
-
-stopBtn.addEventListener("click", () => {
-  if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      mediaRecorder.start();
+      isRecording = true;
+      audioToggle.classList.add("recording");
+      console.log("Recording started");
+    } catch (err) {
+      console.error("Microphone error:", err);
+    }
+  } else {
     mediaRecorder.stop();
+    isRecording = false;
+    audioToggle.classList.remove("recording");
     console.log("Recording stopped");
-
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
   }
 });

@@ -39,6 +39,7 @@ map.on("locationfound", (e) => {
 
   if (!isTracking) return;
 
+
   const newPoint = {
     lat: e.latlng.lat,
     lng: e.latlng.lng
@@ -56,6 +57,8 @@ map.on("locationfound", (e) => {
   }
 
   routePoints.push(newPoint);
+  console.log(routePoints);
+  
 
   if (!routePolyline) {
   routePolyline = L.polyline(
@@ -74,9 +77,26 @@ map.on("locationfound", (e) => {
 });
 
 
-document.getElementById('start-tracking').addEventListener('click', () => {
-  startTracking();
+let _isTracking = false;
+
+document.getElementById('toggle-tracking').addEventListener('click', () => {
+  const button = document.getElementById('toggle-tracking');
+
+  if (!_isTracking) {
+    startTracking();
+    button.textContent = 'Save';
+    button.style.backgroundColor = 'red'; // Change color when tracking
+  } else {
+    stopTracking();
+    button.textContent = 'Record';
+    button.style.backgroundColor = ''; // Reset to default or another color
+  }
+
+  _isTracking = !_isTracking;
+  button.classList.toggle('tracking-active');
+
 });
+
 
 const saveRouteDialog = document.getElementById('save-route-dialog');
 const routeForm = document.getElementById('route-form');
@@ -142,9 +162,6 @@ function calculateRouteDistance(points) {
   return distance;
 }
 
-document.getElementById('stop-tracking').addEventListener('click', () => {
-  stopTracking();
-});
 
 
 // Add this near your other variables

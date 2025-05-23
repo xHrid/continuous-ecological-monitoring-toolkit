@@ -1,13 +1,14 @@
 /* setting up the map */
 const map = L.map("map", {
-  minZoom: 14,
+  minZoom: 15,
   maxZoom: 17,
   maxBoundsViscosity: 1.0,
+  zoomControl: false
 }).setView([28.522722996428367, 77.16883125123917], 2);
 
 map.on("zoomend", () => {
   const currentZoom = map.getZoom();
-  if (currentZoom < 14) map.setZoom(14);
+  if (currentZoom < 15) map.setZoom(15);
   else if (currentZoom > 17) map.setZoom(17);
 });
 
@@ -21,13 +22,13 @@ fetch("./geojson/bounding_box.geojson")
     const bounds = strataLayer.getBounds();
     map.fitBounds(bounds);
     map.setMaxBounds(bounds);
-    const initialZoom = Math.min(17, Math.max(14, map.getZoom()));
+    const initialZoom = Math.min(17, Math.max(15, map.getZoom()));
     map.setZoom(initialZoom);
   });
 
 L.tileLayer("./tiles/{z}/{x}/{y}.png", {
   maxZoom: 17,
-  minZoom: 14,
+  minZoom: 15,
   noWrap: true,
   errorTileUrl: "./leaflet/images/white_box.png",
 }).addTo(map);
