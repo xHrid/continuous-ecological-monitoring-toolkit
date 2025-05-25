@@ -4,9 +4,10 @@
 <head>
     <title>Sanjay Van Monitoring</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./control_style.css" />
-    <link rel="stylesheet" href="spot_popup.css" />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./styles/control_style.css" />
+    <link rel="stylesheet" href="./styles/spot_popup.css" />
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="stylesheet" href="./styles/details-style.css">
     <link rel="stylesheet" href="./leaflet/leaflet.css" />
 </head>
 
@@ -15,20 +16,20 @@
     <button id="menu-toggle">☰</button>
 
     <!-- Sidebar Menu -->
-    <div id="controls" class="open">
+    <div id="controls">
         <div class="div-label" id="radio-label">Stratification</div>
         <div class="control radios_div">
             <label><input type="radio" name="geojsonOption" value="clear" checked />None</label>
-            <label><input type="radio" name="geojsonOption" value="cp2_vectorize.geojson" />2 Cluster</label>
-            <label><input type="radio" name="geojsonOption" value="cp3.geojson" />3
+            <label><input type="radio" name="geojsonOption" value="cp2img.png" />2 Cluster</label>
+            <label><input type="radio" name="geojsonOption" value="cp3img.png" />3
                 Cluster</label>
-            <label><input type="radio" name="geojsonOption" value="cp4.geojson" />4
+            <label><input type="radio" name="geojsonOption" value="cp4img.png" />4
                 Cluster</label>
         </div>
         <div class="control">
             <div class="div-label">
                 Spots
-                <img src="./images/spots-image.png" alt="Spots Icon" class="icon-inline" />
+                <img src="./images/assets/spots-image.png" alt="Spots Icon" class="icon-inline" />
             </div>
 
             <button id="open-form">Add</button>
@@ -39,7 +40,7 @@
         <div class="control">
             <div class="div-label">
                 Routes
-                <img src="./images/trail.png" alt="Routes Icon" class="icon-inline" />
+                <img src="./images/assets/trail.png" alt="Routes Icon" class="icon-inline" />
             </div>
             <button id="toggle-tracking">Record</button>
             <label for="show-routes-toggle">
@@ -60,12 +61,12 @@
 
                 <div class="media-controls">
                     <label for="image-upload" class="custom-upload">
-                        <img src="./images/dslr-camera.png" alt="Routes Icon" class="camera-icon" />
+                        <img src="./images/assets/dslr-camera.png" alt="Routes Icon" class="camera-icon" />
                     </label>
                     <input type="file" id="image-upload" name="image" accept="image/*" capture="environment"
                         style="display: none;" />
                     <label id="audio-toggle" class="custom-upload">
-                        <img src="./images/mic.png" alt="Audio Icon" class="camera-icon" />
+                        <img src="./images/assets/mic.png" alt="Audio Icon" class="camera-icon" />
                     </label>
                     <audio id="audioPlayback" controls class="audio-player"></audio>
                 </div>
@@ -95,68 +96,38 @@
 
     <div id="map"></div>
 
-    <div id="spot-details-menu">
-        <button id="close-spot-details">x</button>
-        <div id="spot-details-content"></div>
+<div id="spot-details-menu">
+  <button id="close-spot-details">x</button>
+  <div id="spot-details-content">
+    <h2 id="spot-name">Unnamed Spot</h2>
+    <p><strong>Description:</strong> <span id="spot-description">No description</span></p>
+    <p><strong>Birds observed:</strong></p>
+    <ul id="spot-birds-list"></ul>
+    <p><span id="spot-coordinates"></span></p>
+    
+    <div id="spot-image-container">
+      <p><strong>Image:</strong></p>
+      <img id="spot-image" alt="Spot image" style="max-width: 100%; height: auto; display: none;" />
     </div>
 
-    <script type="module">
-        // Firebase Core
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-analytics.js";
+    <div id="spot-audio-container">
+      <p><strong>Audio:</strong></p>
+      <audio id="spot-audio" controls style="width: 100%; display: none;"></audio>
+    </div>
 
-        // Database Services (added these)
-        import {
-            getFirestore,
-            collection,
-            addDoc,
-            getDocs,
-            serverTimestamp,
-        } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-firestore.js";
+    <button id="add-more-button" style="margin-top: 10px;">Add More</button>
 
-        import {
-            getStorage,
-            ref,
-            uploadBytes,
-            getDownloadURL,
-        } from "https://www.gstatic.com/firebasejs/11.8.0/firebase-storage.js";
+  </div>
+</div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDddPHvCMiAZui6RhYkUz69rQ69QS5aLIc",
-            authDomain: "mapnotes-c57fd.firebaseapp.com",
-            projectId: "mapnotes-c57fd",
-            storageBucket: "mapnotes-c57fd.firebasestorage.app",
-            messagingSenderId: "552347033390",
-            appId: "1:552347033390:web:4e530d192f4c6aa3dfe4bf",
-            measurementId: "G-KXQ6JVVPTS",
-        };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-
-        // Initialize Services (added these)
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        // Make these available globally (optional but useful)
-        window.firebaseServices = {
-            db,
-            storage,
-            serverTimestamp,
-            collection,
-            addDoc,
-            getDocs,
-            ref,
-            uploadBytes,
-            getDownloadURL,
-        };
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="./leaflet/leaflet.js"></script>
-    <script src="./map.js"></script>
-    <script src="./route.js"></script>
-    <script src="./app.js"></script>
-    <script src="./spots.js"></script>
+    <script src="./scripts/supabase.js"></script>
+    <script src="./scripts/map.js"></script>
+    <script src="./scripts/route.js"></script>
+    <script src="./scripts/app.js"></script>
+    <script src="./scripts/spots.js"></script>
 </body>
 
 </html>
