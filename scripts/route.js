@@ -29,8 +29,17 @@ map.on("locationfound", (e) => {
   if (currentMarker) map.removeLayer(currentMarker);
   if (currentCircle) map.removeLayer(currentCircle);
 
-  currentMarker = L.marker(e.latlng).addTo(map).bindPopup("You are here");
-  currentCircle = L.circle(e.latlng, r).addTo(map);
+  currentMarker = L.marker(e.latlng, { interactive: false }).addTo(map);
+// no .bindPopup("You are here") if you don’t want interaction
+
+currentCircle = L.circle(e.latlng, {
+  radius: r,
+  interactive: false, // disable clicking, hovering, etc.
+  color: "#136aec",
+  fillColor: "#136aec",
+  fillOpacity: 0.2
+}).addTo(map);
+
 
   if (firstFix) {
     map.setView(e.latlng, map.getZoom());
@@ -192,9 +201,9 @@ async function fetchAndDisplayRoutes() {
       const latLngs = routeData.points.map((pt) => [pt.lat, pt.lng]);
 
       const polyline = L.polyline(latLngs, {
-        color: "#ff7800",
-        weight: 3,
-        opacity: 0.7,
+        color: "#ff0000",
+        weight: 4,
+        opacity: 0.8,
       }).addTo(map);
 
       const dateStr = routeData.created_at

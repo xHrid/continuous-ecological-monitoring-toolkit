@@ -79,10 +79,15 @@ async function displaySpots() {
 
     // Add markers for unique spots
     spotsLayer = L.layerGroup().addTo(map);
+    const isMobile = window.innerWidth <= 768;
+    let r = 10;
+    if (isMobile) {
+      r = 16;
+    }
 
     Object.values(uniqueSpots).forEach(spot => {
       const circle = L.circleMarker([spot.latitude, spot.longitude], {
-        radius: 8,
+        radius: r,
         fillColor: "#3388ff",
         color: "#000",
         weight: 1,
@@ -195,7 +200,7 @@ function showSpotDetails(spot) {
     currLat = spot.latitude;
     currLng = spot.longitude;
 
-    document.getElementById("popup-form").style.display = "block";
+    document.getElementById("popup-form").style.display = "flex";
   });
 
   menu.classList.add("open");
@@ -220,17 +225,17 @@ document.getElementById('display-spots').addEventListener('change', function(e) 
   }
 });
 
-document.getElementById("add-more-button").addEventListener("click", () => {
-  const form = document.getElementById("spot-form");
+// document.getElementById("add-more-button").addEventListener("click", () => {
+//   const form = document.getElementById("spot-form");
   
-  // Set values
-  form.name.value = lastViewedSpot.name;
-  form.name.readOnly = true;
+//   // Set values
+//   form.name.value = lastViewedSpot.name;
+//   form.name.readOnly = true;
 
-  // Store lat/lng in hidden fields (or just vars)
-  currLat = lastViewedSpot.latitude;
-  currLng = lastViewedSpot.longitude;
+//   // Store lat/lng in hidden fields (or just vars)
+//   currLat = lastViewedSpot.latitude;
+//   currLng = lastViewedSpot.longitude;
 
-  // Show form
-  document.getElementById("popup-form").style.display = "block";
-});
+//   // Show form
+//   document.getElementById("popup-form").style.display = "block";
+// });

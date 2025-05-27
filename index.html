@@ -3,6 +3,8 @@
 
 <head>
     <title>Sanjay Van Monitoring</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles/control_style.css" />
     <link rel="stylesheet" href="./styles/spot_popup.css" />
@@ -16,7 +18,7 @@
     <button id="menu-toggle">☰</button>
 
     <!-- Sidebar Menu -->
-    <div id="controls">
+    <div id="controls" class="open">
         <div class="div-label" id="radio-label">Stratification</div>
         <div class="control radios_div">
             <label><input type="radio" name="geojsonOption" value="clear" checked />None</label>
@@ -83,8 +85,8 @@
             <h3>Save Route</h3>
             <form id="route-form">
                 <div>
-                    <label for="route-name">Route Name (optional):</label>
-                    <input type="text" id="route-name" placeholder="Morning Walk" />
+                    <label for="route-name">Name (optional):</label>
+                    <input type="text" id="route-name" placeholder="Walk" />
                 </div>
                 <div class="button-group">
                     <button type="submit" class="save-btn">Save</button>

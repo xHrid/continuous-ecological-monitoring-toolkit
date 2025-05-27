@@ -58,7 +58,29 @@
   margin-top: 20px;
 }
 
+.button-group * {
+  font-size: 1rem;
+  width: 5rem;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: rgb(0, 255, 110);
+  cursor: pointer;
+}
+
 .tracking-active {
   background-color: red;
   color: white;
+}
+
+
+.save-route-dialog {
+  display: block;
+}
+
+#route-name {
+  width: 100%;
+  padding: 0.2rem;
+  margin: 1rem 0rem;
+  border: 2px solid black;
 }

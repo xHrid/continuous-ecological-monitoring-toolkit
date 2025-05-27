@@ -16,7 +16,7 @@ fetch("./geojson/bounding_box.geojson")
   .then((res) => res.json())
   .then((strataData) => {
     const strataLayer = L.geoJSON(strataData, {
-      style: { color: "#3388ff", weight: 2, fillOpacity: 0 },
+      style: { color: "#3388ff", weight: 0.5, fillOpacity: 0 },
     }).addTo(map);
 
     const bounds = strataLayer.getBounds();
