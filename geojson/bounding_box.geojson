@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "bounding_box",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": "00039C2651382DADC6C0", "Name": "bounding_box", "description": null, "timestamp": null, "begin": null, "end": null, "altitudeMode": null, "tessellate": -1, "extrude": 0, "visibility": -1, "drawOrder": null, "icon": null }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 77.154508703311436, 28.518177691670669, 0.0 ], [ 77.21494495389426, 28.517844094605412, 0.0 ], [ 77.21479313329759, 28.553914760293189, 0.0 ], [ 77.154680310342954, 28.553717740576889, 0.0 ], [ 77.154508703311436, 28.518177691670669, 0.0 ] ] ] } }
-]
-}

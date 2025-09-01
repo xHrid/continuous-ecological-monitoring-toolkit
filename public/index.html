@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sanjay Van Monitoring</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles/control_style.css" />
+    <link rel="stylesheet" href="./styles/spot_popup.css" />
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="stylesheet" href="./styles/details-style.css">
+    <link rel="stylesheet" href="./leaflet/leaflet.css" />
+    <link rel="stylesheet" href="./styles/add_site_section.css" />
+</head>
+
+<body>
+    <button id="menu-toggle">☰</button>
+
+    <div id="controls" class="open">
+
+        <div class="add-site-div">
+            <button class="add_site">Add Site</button>
+        </div>
+
+        <div id="stratification-controls"></div>
+
+        <div class="control">
+            <div class="div-label">
+                Spots
+                <img src="./images/assets/spots-image.png" alt="Spots Icon" class="icon-inline" />
+            </div>
+
+            <button id="open-form">Add</button>
+            <label class="spot-toggle">
+                <input type="checkbox" id="display-spots" /> Show
+            </label>
+        </div>
+        <div class="control">
+            <div class="div-label">
+                Routes
+                <img src="./images/assets/trail.png" alt="Routes Icon" class="icon-inline" />
+            </div>
+            <button id="toggle-tracking">Record</button>
+            <label for="show-routes-toggle">
+                <input type="checkbox" id="show-routes-toggle" /> Show
+            </label>
+        </div>
+    </div>
+
+    <div id="latlon"><label>Lat Long</label></div>
+
+    <div id="popup-form" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <form id="spot-form">
+                <input type="text" name="name" placeholder="Spot Name" />
+                <input type="text" name="birds" placeholder="Birds Seen" />
+                <textarea name="description" placeholder="Description"></textarea>
+
+                <div class="media-controls">
+                    <label for="image-upload" class="custom-upload">
+                        <img src="./images/assets/dslr-camera.png" alt="Routes Icon" class="camera-icon" />
+                    </label>
+                    <input type="file" id="image-upload" name="image" accept="image/*" capture="environment"
+                        style="display: none;" />
+                    <label id="audio-toggle" class="custom-upload">
+                        <img src="./images/assets/mic.png" alt="Audio Icon" class="camera-icon" />
+                    </label>
+                    <audio id="audioPlayback" controls class="audio-player"></audio>
+                </div>
+                <button type="submit" class="popup-btn">Submit</button>
+                <button type="button" id="close-form" class="popup-btn">Cancel</button>
+            </form>
+            <div id="status"></div>
+        </div>
+    </div>
+
+    <div id="add-site-popup-form" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <form id="add-site-form">
+                <h3>Add New Site</h3>
+                <input type="text" name="siteName" placeholder="Site Name" required />
+
+                <label for="kml-upload" class="kml-upload-area">
+                    <span id="kml-file-name">Choose KML file...</span>
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='17 8 12 3 7 8'%3E%3C/polyline%3E%3Cline x1='12' y1='3' x2='12' y2='15'%3E%3C/line%3E%3C/svg%3E"
+                        alt="Upload Icon" />
+                </label>
+                <input type="file" id="kml-upload" name="kml" accept=".kml" required />
+
+                <select name="clusters" required>
+                    <option value="" disabled selected>Select number of clusters</option>
+                    <option value="2">2 Clusters</option>
+                    <option value="3">3 Clusters</option>
+                    <option value="4">4 Clusters</option>
+                    <option value="5">5 Clusters</option>
+                </select>
+
+                <div class="button-group">
+                    <button type="submit" class="popup-btn">Submit</button>
+                    <button type="button" id="close-add-site-form" class="popup-btn cancel-btn">Cancel</button>
+                </div>
+            </form>
+            <div id="add-site-status"></div>
+        </div>
+    </div>
+
+    <div id="save-route-dialog" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Save Route</h3>
+            <form id="route-form">
+                <div>
+                    <label for="route-name">Name (optional):</label>
+                    <input type="text" id="route-name" placeholder="Walk" />
+                </div>
+                <div class="button-group">
+                    <button type="submit" class="save-btn">Save</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div id="spot-details-menu">
+        <button id="close-spot-details">x</button>
+        <div id="spot-details-content">
+        </div>
+    </div>
+
+
+    <script src="./leaflet/leaflet.js"></script>
+    <script src="./scripts/map.js"></script>
+    <script src="./scripts/route.js"></script>
+    <script src="./scripts/spots.js"></script>
+    <script src="./scripts/ui.js"></script>      
+    <script src="./scripts/app.js"></script>      
+</body>
+
+</html>
+</body>
+
+</html>
