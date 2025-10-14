@@ -3,7 +3,6 @@ __pycache__/
 
 # User-generated data
 data/sites/
-data/routes/
 data/temp/
 data/uploads/
 
