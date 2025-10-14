@@ -1,20 +1,13 @@
-// public/scripts/map.js
-
-/* setting up the map */
 const map = L.map("map", { minZoom: 3, maxZoom: 18, zoomControl: false }).setView([20, 0], 3);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', noWrap: false }).addTo(map);
 
 let clusterLayer = null; let spotsLayer = null;
 const stratificationDataStore = {};
 
-/**
- * RENAMED & MODIFIED: Appends a control block for a single site to the sidebar.
- * @param {object} siteData The full site object from the server.
- */
+
 function displaySiteControls(siteData) {
     const controlsContainer = document.getElementById("stratification-controls");
     
-    // Create a container for this specific site's controls
     const siteContainer = document.createElement('div');
     siteContainer.className = 'site-control-block';
 
@@ -26,7 +19,6 @@ function displaySiteControls(siteData) {
     const radioDiv = document.createElement('div');
     radioDiv.className = 'control radios_div';
     
-    // Use a unique name for each site's radio button group
     const radioGroupName = `geojsonOption_${siteData.siteId}`;
 
     const noneLabel = document.createElement('label');
@@ -46,10 +38,8 @@ function displaySiteControls(siteData) {
     siteContainer.appendChild(radioDiv);
     controlsContainer.appendChild(siteContainer); // Append the new site block
 
-    // Add event listeners to this new group of radio buttons
     document.querySelectorAll(`input[name="${radioGroupName}"]`).forEach((radio) => {
         radio.addEventListener("change", (e) => {
-            // Uncheck radios in other site groups
             document.querySelectorAll(`input[type="radio"]:not([name="${radioGroupName}"])`).forEach(otherRadio => {
                 if(otherRadio.value === 'clear') otherRadio.checked = true;
             });
@@ -57,7 +47,6 @@ function displaySiteControls(siteData) {
         });
     });
 
-    // If this is a newly added site, select its highest cluster
     const isNewlyAdded = document.activeElement && document.activeElement.form && document.activeElement.form.id === 'add-site-form';
     if (isNewlyAdded && lastImagePath) {
         const newRadio = document.querySelector(`input[value="${lastImagePath}"]`);
@@ -65,10 +54,6 @@ function displaySiteControls(siteData) {
     }
 }
 
-/**
- * Loads a stratification image overlay onto the map. (Unchanged)
- * @param {string} imagePath The path to the overlay image, or "clear".
- */
 function loadStratification(imagePath) {
     if (clusterLayer) { map.removeLayer(clusterLayer); clusterLayer = null; }
     if (imagePath === "clear") return;

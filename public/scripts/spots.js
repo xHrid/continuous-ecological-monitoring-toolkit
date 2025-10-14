@@ -1,11 +1,3 @@
-// public/scripts/spots.js
-
-/**
- * Converts a file or blob object into a Base64 encoded string.
- * This is used to transport the file data to the server within a JSON payload.
- * @param {File|Blob} file The file or blob to convert.
- * @returns {Promise<string|null>} A promise that resolves with the Base64 data URL, or null if no file is provided.
- */
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         if (!file) {
@@ -19,15 +11,11 @@ function fileToBase64(file) {
     });
 }
 
-
-/**
- * Handles the submission of the spot form for both new spots and new observations.
- */
 document.getElementById("spot-form").onsubmit = async function (e) {
     e.preventDefault();
 
     const form = e.target;
-    const spotId = form.dataset.spotId || null; // Get spotId if we are updating
+    const spotId = form.dataset.spotId || null; 
     const name = form.name.value.trim();
     const birds = form.birds.value.trim();
     const desc = form.description.value.trim();
@@ -47,9 +35,8 @@ document.getElementById("spot-form").onsubmit = async function (e) {
             fileToBase64(audioBlob)
         ]);
 
-        // This object now includes the spotId if it's an update
         const payload = {
-            spotId, // Will be null for new spots
+            spotId, 
             name,
             latitude: currLat,
             longitude: currLng,
@@ -73,9 +60,8 @@ document.getElementById("spot-form").onsubmit = async function (e) {
         const result = await response.json();
         alert(result.message);
 
-        // Reset the form and UI
         form.reset();
-        delete form.dataset.spotId; // Clear the spotId from the form
+        delete form.dataset.spotId; 
         document.getElementById("popup-form").style.display = "none";
         document.getElementById("status").textContent = "";
         recordedAudioBlob = null;
@@ -83,9 +69,7 @@ document.getElementById("spot-form").onsubmit = async function (e) {
             imageLabel.classList.remove("selected");
         }
 
-        // Refresh the spots on the map to show the new data
         displaySpots();
-        // If we just updated a spot, re-open its details to see the new observation
         if(spotId) {
             const updatedSpot = allSpots.find(s => s.spotId === spotId);
             if(updatedSpot) showSpotDetails(updatedSpot);
@@ -99,13 +83,10 @@ document.getElementById("spot-form").onsubmit = async function (e) {
     }
 };
 
-// Global variables
 let allSpots = [];
 spotsLayer = null;
 
-/**
- * Fetches all spot data from the server and displays them on the map.
- */
+
 async function displaySpots() {
   try {
     if (spotsLayer) {
@@ -142,73 +123,92 @@ async function displaySpots() {
   }
 }
 
-/**
- * Displays the details panel with a timeline of all observations for a spot.
- * @param {object} spot The full spot object, including its `observations` array.
- */
+
 function showSpotDetails(spot) {
-  const menu = document.getElementById("spot-details-menu");
-  const content = document.getElementById("spot-details-content");
+    const menu = document.getElementById("spot-details-menu");
+    const content = document.getElementById("spot-details-content");
 
-  // Sort observations, newest first
-  const sortedObservations = spot.observations.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    // --- Part 1: Standard Observation Timeline ---
+    const sortedObservations = spot.observations
+        .filter(obs => obs.type !== 'external_import') // Exclude external data from main timeline
+        .sort((a, b) => new Date(b.createdAt || b.timestamp) - new Date(a.createdAt || a.timestamp));
 
-  // Build the HTML for the timeline from the observations array
-  const timelineHtml = sortedObservations.map(obs => {
-      const birds = obs.birds
-        ? `<ul>${obs.birds.split(',').map(b => `<li>${b.trim()}</li>`).join('')}</ul>`
-        : "<p>No birds recorded</p>";
+    const timelineHtml = sortedObservations.map(obs => {
+        const obsDate = new Date(obs.createdAt || obs.timestamp).toLocaleString();
+        const birds = obs.birds ? `<ul>${obs.birds.split(',').map(b => `<li>${b.trim()}</li>`).join('')}</ul>` : "<p>No birds recorded</p>";
+        const image = obs.imagePath ? `<img src="${obs.imagePath}" alt="Spot image" style="max-width: 100%; margin-top: 5px; border-radius: 4px;">` : "";
+        const audio = obs.audioPath ? `<audio controls src="${obs.audioPath}" style="width: 100%; margin-top: 5px;"></audio>` : "";
 
-      // Use the new file paths for media
-      const image = obs.imagePath
-        ? `<img src="${obs.imagePath}" alt="Spot image" style="max-width: 100%; margin-top: 5px; border-radius: 4px;">`
-        : "";
-
-      const audio = obs.audioPath
-        ? `<audio controls src="${obs.audioPath}" style="width: 100%; margin-top: 5px;"></audio>`
-        : "";
-
-      return `
-        <div class="spot-entry" style="border: 1px solid #ccc; padding: 8px; margin-top: 10px; border-radius: 8px;">
-          <p><small><strong>Observed on:</strong> ${new Date(obs.createdAt).toLocaleString()}</small></p>
-          <p><strong>Description:</strong> ${obs.description || "No description"}</p>
-          <p><strong>Birds:</strong></p>
-          ${birds}
-          ${image}
-          ${audio}
-        </div>
-      `;
+        return `
+            <div class="spot-entry" style="border: 1px solid #ccc; padding: 8px; margin-top: 10px; border-radius: 8px;">
+                <p><small><strong>Observed on:</strong> ${obsDate}</small></p>
+                <p><strong>Description:</strong> ${obs.description || obs.notes || "No description"}</p>
+                <p><strong>Birds:</strong></p>
+                ${birds}
+                ${image}
+                ${audio}
+            </div>
+        `;
     }).join("");
 
-  // Update the details panel content
-  content.innerHTML = `
-    <h2 id="spot-name">${spot.name}</h2>
-    <p><span id="spot-coordinates">(${spot.latitude.toFixed(6)}, ${spot.longitude.toFixed(6)})</span></p>
-    ${timelineHtml}
-    <button id="add-more-button" style="margin-top: 20px;">Add More</button>
-  `;
+    const externalObservations = spot.observations.filter(obs => obs.type === 'external_import');
+    const hasExternalData = externalObservations.length > 0;
 
-  // Re-attach the "Add More" listener
-  document.getElementById("add-more-button").addEventListener("click", () => {
-    const form = document.getElementById("spot-form");
-    
-    // Store the spotId on the form itself to be used on submit
-    form.dataset.spotId = spot.spotId;
-    
-    // Pre-fill and lock the name field
-    form.name.value = spot.name;
-    form.name.readOnly = true;
+    content.innerHTML = `
+        <h2 id="spot-name">${spot.name}</h2>
+        <p><span id="spot-coordinates">(${spot.latitude.toFixed(6)}, ${spot.longitude.toFixed(6)})</span></p>
+        <button id="show-external-data-btn" class="show-external-data-btn" ${!hasExternalData ? 'disabled' : ''}>
+            Show External Media
+        </button>
+        <hr>
+        ${timelineHtml || "<p>No field observations recorded yet.</p>"}
+        <button id="add-more-button" style="margin-top: 20px;">Add More</button>
+    `;
 
-    // Set coordinates and show the form
-    currLat = spot.latitude;
-    currLng = spot.longitude;
-    document.getElementById("popup-form").style.display = "flex";
-  });
+    document.getElementById("add-more-button").addEventListener("click", () => {
+        const form = document.getElementById("spot-form");
+        form.dataset.spotId = spot.spotId;
+        form.name.value = spot.name;
+        form.name.readOnly = true;
+        currLat = spot.latitude;
+        currLng = spot.longitude;
+        document.getElementById("popup-form").style.display = "flex";
+    });
 
-  menu.classList.add("open");
+    if (hasExternalData) {
+        document.getElementById("show-external-data-btn").addEventListener("click", () => {
+            const viewer = document.getElementById("external-data-viewer");
+            const dataContent = document.getElementById("external-data-content");
+
+            const filesByDate = externalObservations.reduce((acc, obs) => {
+                const date = new Date(obs.timestamp).toLocaleDateString();
+                if (!acc[date]) {
+                    acc[date] = [];
+                }
+                obs.media.forEach(file => acc[date].push(file.path));
+                return acc;
+            }, {});
+
+            const viewerHtml = Object.entries(filesByDate).map(([date, files]) => {
+                const fileLinks = files.map(path => {
+                    const fileName = path.split('/').pop();
+                    return `<a href="/${path}" target="_blank">${fileName}</a>`;
+                }).join('');
+                return `<h4>${date}</h4>${fileLinks}`;
+            }).join('');
+
+            dataContent.innerHTML = viewerHtml;
+            viewer.style.display = "flex";
+        });
+    }
+
+    document.getElementById("close-external-viewer").addEventListener("click", () => {
+        document.getElementById("external-data-viewer").style.display = "none";
+    });
+
+    menu.classList.add("open");
 }
 
-// --- EVENT LISTENERS ---
 
 document.getElementById('display-spots').addEventListener('change', function(e) {
   if (this.checked) {
@@ -225,10 +225,9 @@ document.getElementById("close-spot-details").addEventListener("click", () => {
   document.getElementById("spot-details-menu").classList.remove("open");
 });
 
-// When the main popup form is closed, reset its state
 document.getElementById("close-form").addEventListener("click", () => {
     const form = document.getElementById("spot-form");
     form.reset();
     form.name.readOnly = false;
-    delete form.dataset.spotId; // Important: clear the spotId
+    delete form.dataset.spotId; 
 });

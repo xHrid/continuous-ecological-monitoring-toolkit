@@ -1,0 +1,39 @@
+{
+    "id": "acoustic_indices",
+    "name": "Calculate Acoustic Indices",
+    "description": "Processes raw audio recordings to calculate a standard set of ecological acoustic indices (e.g., ADI, ACI, NDSI). This helps quantify the characteristics of a soundscape.",
+    "parameters": [
+        {
+            "name": "segment_duration",
+            "label": "Segment Duration (seconds)",
+            "type": "number",
+            "required": false,
+            "default": 120.0,
+            "placeholder": "e.g., 120.0"
+        },
+        {
+            "name": "skip_duration",
+            "label": "Skip Between Segments (seconds)",
+            "type": "number",
+            "required": false,
+            "default": 60.0,
+            "placeholder": "e.g., 60.0"
+        },
+        {
+            "name": "total_segments",
+            "label": "Max Segments per File",
+            "type": "number",
+            "required": false,
+            "default": 2,
+            "placeholder": "e.g., 2"
+        },
+        {
+            "name": "snr_db",
+            "label": "Noise Reduction (SNR in dB)",
+            "type": "number",
+            "required": false,
+            "default": 18.0,
+            "placeholder": "e.g., 18.0"
+        }
+    ]
+}

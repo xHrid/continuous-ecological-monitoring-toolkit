@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="./styles/details-style.css">
     <link rel="stylesheet" href="./leaflet/leaflet.css" />
     <link rel="stylesheet" href="./styles/add_site_section.css" />
+    <link rel="stylesheet" href="./styles/import_media.css" />
+    <link rel="stylesheet" href="./styles/external_data_viewer.css" />
 </head>
 
 <body>
@@ -21,6 +23,9 @@
 
         <div class="add-site-div">
             <button class="add_site">Add Site</button>
+            <button id="import-media-btn" class="control-button">Import</button>
+            <button id="analysis-btn" class="control-button">Analysis</button>
+            <button id="jobs-btn" class="control-button">Jobs</button>
         </div>
 
         <div id="stratification-controls"></div>
@@ -121,6 +126,32 @@
             </form>
         </div>
     </div>
+<div id="import-media-popup" class="import-popup-overlay" style="display: none;">
+        <div class="import-popup-content">
+            <form id="import-media-form" novalidate>
+                <h3>Import External Media</h3>
+                <p class="import-form-subtitle">Link external files to one or more existing spots.</p>
+
+                <label class="import-form-label" for="spot-selection-container">1. Select Spots:</label>
+                <div id="spot-selection-container" class="import-multi-select-box">
+                    </div>
+
+                <label class="import-form-label" for="external-file-input">2. Select Files:</label>
+                <input type="file" id="external-file-input" name="files" class="import-file-input" multiple required>
+
+                <label class="import-form-label">3. File Destination:</label>
+                <div class="import-path-preview-wrapper">
+                    <strong>Preview:</strong>
+                    <p id="destination-path-preview">data/spots/{spot_name}/external_data/{date}</p>
+                </div>
+
+                <div class="import-form-actions">
+                    <button type="submit" class="import-action-btn">Import</button>
+                    <button type="button" id="cancel-import-btn" class="import-secondary-action-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div id="map"></div>
 
@@ -130,7 +161,52 @@
         </div>
     </div>
 
+    <div id="external-data-viewer" class="external-data-popup" style="display: none;">
+        <div class="external-data-header">
+            <h3>External Media</h3>
+            <button id="close-external-viewer" class="close-viewer-btn">×</button>
+        </div>
+        <div id="external-data-content" class="external-data-list">
+            </div>
+    </div>
+    <!-- ANALYSIS SELECTION POPUP -->
+    <div id="analysis-popup" class="import-popup-overlay" style="display: none;">
+        <div class="import-popup-content">
+            <form id="analysis-form">
+                <h3>Run Analysis</h3>
+                <p class="import-form-subtitle">Select an analysis script and provide input files.</p>
 
+                <label class="import-form-label">1. Select Analysis Script:</label>
+                <select id="analysis-script-select" name="script_id" class="import-file-input" required></select>
+                <p id="analysis-description" style="font-size: 0.9rem; margin-top: 5px; color: #555;"></p>
+                <div id="custom-parameters-container" class="custom-params"></div>
+
+                <h4 class="analysis-section-title">2. Select Input Files (WAV Audio)</h4>
+                <div id="analysis-file-selection" class="analysis-multi-select-box">
+                    <!-- Files will be loaded here by JavaScript -->
+                </div>
+
+                <div class="import-form-actions">
+                    <button type="submit" class="import-action-btn">Run Job</button>
+                    <button type="button" id="cancel-analysis-btn" class="import-secondary-action-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JOBS VIEWER POPUP -->
+    <div id="jobs-popup" class="import-popup-overlay" style="display: none;">
+        <div class="import-popup-content" style="max-width: 800px;">
+            <div class="external-data-header">
+                <h3>Job Status</h3>
+                <button id="close-jobs-btn" class="close-viewer-btn">×</button>
+            </div>
+            <button id="refresh-jobs-btn" class="control-button" style="margin-bottom: 10px;">Refresh</button>
+            <div id="jobs-list" class="external-data-list">
+                <!-- Job statuses will be populated here -->
+            </div>
+        </div>
+    </div>
     <script src="./leaflet/leaflet.js"></script>
     <script src="./scripts/map.js"></script>
     <script src="./scripts/route.js"></script>

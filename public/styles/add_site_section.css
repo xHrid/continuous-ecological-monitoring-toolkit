@@ -116,3 +116,7 @@
 #add-site-popup-form .popup-btn.cancel-btn {
     background-color: #6c757d;
 }
+
+.add_site {
+    display: block;
+}

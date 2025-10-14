@@ -8,13 +8,10 @@ from datetime import datetime
 from fastapi import APIRouter, UploadFile, File, Form
 from fastapi.responses import JSONResponse
 
-# Use relative imports for modules within the same package
 from ..gee_processor import generate_stratification
 
-# Create an instance of APIRouter.
 router = APIRouter()
 
-# Define constants for file paths
 DATA_DIR = Path("data")
 SITES_DIR = DATA_DIR / "sites"
 
@@ -25,9 +22,7 @@ async def add_site(
     clusters: int = Form(...),
     kml: UploadFile = File(...)
 ):
-    """
-    Handles the creation of a new site, processing with GEE, and saving the data.
-    """
+
     try:
         results_list = generate_stratification(
             kml_content=await kml.read(),
@@ -61,9 +56,7 @@ async def add_site(
 
 @router.get("/get-sites", tags=["Sites"])
 async def get_sites():
-    """
-    Retrieves a list of all previously created sites, newest first.
-    """
+
     SITES_DIR.mkdir(exist_ok=True)
     all_sites = []
     try:

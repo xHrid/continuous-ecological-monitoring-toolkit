@@ -6,15 +6,12 @@ import aiofiles
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 
-# NOTE: These imports assume you will create the core/utils.py, core/file_handler.py,
-# and core/models.py files as planned.
 from ..core.models import RouteData
 from ..core.file_handler import add_name_to_lookup, is_name_unique
 from ..core.utils import validate_name, slugify, get_timestamp_filename
 
 router = APIRouter()
 
-# Constants
 DATA_DIR = Path("data")
 ROUTE_DIR = DATA_DIR / "routes"
 ROUTE_NAMES_FILE = DATA_DIR / "route_names.json"

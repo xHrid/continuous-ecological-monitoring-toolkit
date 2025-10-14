@@ -2,14 +2,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 
-# This file defines the shape of the data that the API expects to receive.
-# Pydantic uses these models to automatically validate incoming request bodies.
-
 class SpotObservation(BaseModel):
-    """
-    Model for a new spot or a new observation for an existing spot.
-    The 'name' field is required.
-    """
     spotId: Optional[str] = None
     name: str
     latitude: float
@@ -21,9 +14,25 @@ class SpotObservation(BaseModel):
 
 
 class RouteData(BaseModel):
-    """
-    Model for a new route. The 'name' is optional and will be used
-    for the filename if provided.
-    """
     name: Optional[str] = None
     points: List[dict]
+
+
+class AnalysisScript(BaseModel):
+    id: str
+    name: str
+    description: str
+
+class JobRequest(BaseModel):
+    script_id: str
+    spot_names: List[str]
+    input_files: List[str]
+
+class Job(BaseModel):
+    job_id: str
+    script_id: str
+    status: str
+    submitted_at: str
+    spot_names: List[str]
+    payload: Optional[dict] = None
+    results: Optional[dict] = None

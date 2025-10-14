@@ -30,6 +30,33 @@ def kml_path_to_ee_geometry(kml_path):
     geojson_clean = json.loads(json.dumps(geojson))
     return ee.Geometry(geojson_clean)
 
+# --- NEW: LULC MASKING LOGIC (Translated from JS) ---
+
+def get_tree_cover(aoi, year, scale=10):
+    """
+    Uses Dynamic World to create a mask of areas classified as 'trees'.
+    """
+    startDate = ee.Date(f'{year}-01-01')
+    endDate = ee.Date(f'{year+1}-01-01')
+    
+    dw = ee.ImageCollection("GOOGLE/DYNAMICWORLD/V1") \
+        .filterDate(startDate, endDate) \
+        .filterBounds(aoi) \
+        .select('label') \
+        .mode() \
+        .clip(aoi)
+
+    # Class 1 in Dynamic World corresponds to 'trees'
+    dw_tree_mask = dw.eq(1)
+    return dw_tree_mask.selfMask().reproject('EPSG:4326', None, scale)
+
+def lulc_mask_image(image, aoi, year):
+    """
+    Applies the tree cover mask to a given image.
+    """
+    mask = get_tree_cover(aoi, year)
+    return image.updateMask(mask)
+
 def get_annual_embedding(aoi, year=2024):
     start_date = ee.Date(f'{year}-01-01')
     end_date = start_date.advance(1, 'year')
@@ -47,14 +74,18 @@ def generate_stratification(kml_content: bytes, max_clusters: int, year: int = 2
     temp_dir.mkdir(parents=True, exist_ok=True)
     temp_kml_path = temp_dir / f"{uuid.uuid4()}.kml"
     
-    results_list = [] # Will store results for each cluster count
+    results_list = []
 
     try:
         with open(temp_kml_path, 'wb') as f:
             f.write(kml_content)
 
         aoi = kml_path_to_ee_geometry(temp_kml_path)
-        s2_image_aoi = get_annual_embedding(aoi, year)
+        
+        # --- MODIFICATION: Apply the LULC mask here ---
+        s2_image = get_annual_embedding(aoi, year)
+        s2_image_aoi = lulc_mask_image(s2_image, aoi, year)
+        
         training_data = s2_image_aoi.sample(region=aoi, scale=10, numPixels=1000)
         bounds_ee = aoi.bounds()
         bounds_coords = bounds_ee.getInfo()['coordinates'][0]
@@ -63,7 +94,6 @@ def generate_stratification(kml_content: bytes, max_clusters: int, year: int = 2
             [bounds_coords[2][1], bounds_coords[2][0]]
         ]
 
-        # --- MODIFICATION: Loop from 2 to the max cluster count ---
         for k in range(2, max_clusters + 1):
             print(f"Generating stratification for {k} clusters...")
             
@@ -95,7 +125,6 @@ def generate_stratification(kml_content: bytes, max_clusters: int, year: int = 2
             with open(image_path, 'wb') as f:
                 f.write(response.content)
 
-            # Append the result for this specific cluster count to our list
             results_list.append({
                 "image_path": f"/data/media/overlays/{image_filename}",
                 "bounds": bounds_for_leaflet,

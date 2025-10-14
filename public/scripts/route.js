@@ -1,5 +1,3 @@
-// public/scripts/routes.js
-
 let routePoints = [];
 let routePolyline = null;
 let isTracking = false;
@@ -7,7 +5,6 @@ let isTracking = false;
 function startTracking() {
   isTracking = true;
   routePoints = [];
-  // Clear any old route line from the map when starting a new one
   if (routePolyline) {
     map.removeLayer(routePolyline);
     routePolyline = null;
@@ -22,7 +19,6 @@ let currentMarker = null,
   currentCircle = null,
   firstFix = true;
 
-// These are now the primary source for the current location
 let currLat = null;
 let currLng = null;
 
@@ -65,7 +61,6 @@ map.on("locationfound", (e) => {
     const newLatLng = L.latLng(newPoint.lat, newPoint.lng);
     const distance = lastLatLng.distanceTo(newLatLng);
 
-    // Only add a point if it's more than 5 meters away from the last one
     if (distance <= 5) return;
   }
 

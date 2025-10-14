@@ -8,10 +8,9 @@ import aiofiles
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 
-# NOTE: These imports assume you will create the core/utils.py, core/file_handler.py,
-# and core/models.py files as planned.
+from ..core.file_handler import (save_media_file_refactored, add_name_to_lookup, 
+                                 is_name_unique, append_to_observations_csv)
 from ..core.models import SpotObservation
-from ..core.file_handler import save_media_file_refactored, add_name_to_lookup, is_name_unique
 from ..core.utils import validate_name, slugify
 
 router = APIRouter()
@@ -24,13 +23,10 @@ SPOT_NAMES_FILE = DATA_DIR / "spot_names.json"
 
 @router.post("/save-spot", tags=["Spots"])
 async def save_spot(spot: SpotObservation):
-    """
-    Saves a new spot or adds a new observation to an existing spot.
-    """
+
     try:
         is_new_spot = not spot.spotId
         if is_new_spot:
-            # Logic for creating a NEW spot
             validate_name(spot.name)
             if not await is_name_unique(spot.name, SPOT_NAMES_FILE):
                 raise HTTPException(status_code=409, detail="A spot with this name already exists.")
@@ -47,7 +43,6 @@ async def save_spot(spot: SpotObservation):
             spot_data = {"spotId": spot_name_slug, "name": spot.name, "latitude": spot.latitude, "longitude": spot.longitude, "observations": [new_observation]}
             await add_name_to_lookup(spot.name, SPOT_NAMES_FILE)
         else:
-            # Logic for adding an observation to an EXISTING spot
             spot_name_slug = spot.spotId
             spot_file_path = SPOT_DIR / spot_name_slug / "_data.json"
             if not spot_file_path.exists():
@@ -61,9 +56,22 @@ async def save_spot(spot: SpotObservation):
                 spot_data = json.loads(await f.read())
             spot_data["observations"].append(new_observation)
 
-        # Save the JSON file
         async with aiofiles.open(spot_file_path, 'w') as f:
             await f.write(json.dumps(spot_data, indent=2))
+
+        await append_to_observations_csv({
+            "observationId": new_observation["observationId"],
+            "spotId": spot_data["spotId"],
+            "spotName": spot_data["name"],
+            "observationTimestamp": new_observation["createdAt"],
+            "latitude": spot_data["latitude"],
+            "longitude": spot_data["longitude"],
+            "observationType": "Field Observation",
+            "description": new_observation.get("description", ""),
+            "birds": new_observation.get("birds", ""),
+            "imagePath": new_observation.get("imagePath", ""),
+            "audioPath": new_observation.get("audioPath", "")
+        })
 
         return {"message": "Observation saved successfully!", "spotData": spot_data}
     except HTTPException as e:
