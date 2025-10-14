@@ -7,8 +7,6 @@ data/spots/
 data/routes/
 data/temp/
 data/uploads/
-data/spot_names.json
-data/route_names.json
 
 # Test files
 _testing/
