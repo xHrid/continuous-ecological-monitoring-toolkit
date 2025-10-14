@@ -12,3 +12,5 @@ data/route_names.json
 
 # Test files
 _testing/
+_Pipeline-main/
+data
