@@ -1,9 +1,0 @@
-Wrapper: Executing command...
-/usr/bin/python3 /mnt/d/IITD/no_resume/Location 2.0/backend/analysis/acoustic_indices/core_script.py --output-file /mnt/d/IITD/no_resume/Location 2.0/data/processing/jobs/20251014_121129_a6c5641d/results.csv --noise-file /mnt/d/IITD/no_resume/Location 2.0/backend/analysis/acoustic_indices/noise.wav --input-files data/spots/Peacocks_Spot/external_data/251007/2MM04213_20250407_003202.wav
-
---- Starting Acoustic Index Calculation ---
-Processing 1 audio file(s).
-Processing 2MM04213_20250407_003202.wav...
---- Results successfully saved to /mnt/d/IITD/no_resume/Location 2.0/data/processing/jobs/20251014_121129_a6c5641d/results.csv ---
-
-Wrapper: Core script finished successfully.

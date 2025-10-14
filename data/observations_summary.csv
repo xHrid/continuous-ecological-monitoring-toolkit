@@ -1,8 +1,0 @@
-﻿observationId,spotId,spotName,observationTimestamp,latitude,longitude,observationType,description,birds,imagePath,audioPath,externalMediaPaths
-825b5088-957a-451d-a336-f6da5a1e7acc,Peacocks_Spot,Peacocks Spot,2025-10-06T21:12:50.406021,28.5397763,77.1837319,Field Observation,,"Peacock, Pidgeon, aSparrow, Eagle, Crow, Parrot, Duck, Peacock, Pigeon, Owl",/data/spots/Peacocks_Spot/images/251006-211250.jpeg,,
-ext-1759782610,Peacocks_Spot,Peacocks Spot,2025-10-07T02:00:10.733345,28.5397763,77.1837319,External Media Import,Batch import of external media.,,,,data/spots/Peacocks_Spot/external_data/251007/2MM04213_20250407_003202.wav
-7777dcd5-7c68-495b-8fe2-642df5673412,test,test,2025-10-07T13:03:02.353553,28.5397749,77.1830131,Field Observation,t,n,/data/spots/test/images/251007-130302.jpeg,,
-86e984d5-eac3-4b71-afa0-b213309f80b3,yoga_spot,yoga spot,2025-10-14T12:09:52.195785,28.5397749,77.1830131,Field Observation,Testing,none today,/data/spots/yoga_spot/images/251014-120952.jpeg,,
-82577984-1dab-4486-9c13-cc6909fbbc47,yoga_spot,yoga spot,2025-10-14T12:10:07.805603,28.5397749,77.1830131,Field Observation,,again testing,,,
-0bf10644-c4ec-4f6b-bf0f-c954d819075e,Name_again_Testing_123,Name again Testing 123,2025-10-14T12:10:53.770409,28.5397749,77.1830131,Field Observation,,None,,,
-ext-1760424074,Name_again_Testing_123,Name again Testing 123,2025-10-14T12:11:14.821558,28.5397749,77.1830131,External Media Import,Batch import of external media.,,,,data/spots/Name_again_Testing_123/external_data/251014/new_plots.png;data/spots/Name_again_Testing_123/external_data/251014/plots.png
