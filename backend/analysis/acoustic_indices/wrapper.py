@@ -1,5 +1,3 @@
-# backend/analysis/acoustic_indices/wrapper.py
-
 import sys
 import json
 import subprocess
@@ -24,17 +22,16 @@ def main():
         payload = json.load(f)
 
     # --- Define Paths Relative to This Script ---
-    # This makes the script runnable from anywhere.
     script_dir = Path(__file__).parent
     core_script_path = script_dir / "core_script.py"
-    noise_file_path = script_dir / "noise.wav" # The fixed path to the noise file
+    noise_file_path = script_dir / "noise.wav" 
 
     # --- Construct the Command ---
     command = [
         sys.executable,
         str(core_script_path),
         '--output-file', payload['output_file'],
-        '--noise-file', str(noise_file_path),  # Pass the fixed noise file path
+        '--noise-file', str(noise_file_path),  
         '--input-files', *payload['input_files']
     ]
 

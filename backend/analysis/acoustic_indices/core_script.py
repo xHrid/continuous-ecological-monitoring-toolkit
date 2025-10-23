@@ -1,5 +1,3 @@
-# backend/analysis/acoustic_indices/core_script.py
-
 import os
 import re
 import argparse
