@@ -1,3 +1,42 @@
+const notifiedJobIds = new Set();
+const toastElement = document.getElementById("toast-notification");
+
+function showToast(message, status) {
+  toastElement.textContent = message;
+  toastElement.className = `show ${status}`; // 'success' or 'failed'
+
+  // Hide after 5 seconds
+  setTimeout(() => {
+    toastElement.className = "";
+  }, 5000);
+}
+
+async function checkJobStatus() {
+  try {
+    const response = await fetch("/api/analysis/jobs");
+    if (!response.ok) return; // Fail silently
+
+    const jobs = await response.json();
+
+    jobs.forEach((job) => {
+      const isDone = job.status === "completed" || job.status === "failed";
+
+      if (isDone && !notifiedJobIds.has(job.job_id)) {
+        // We have a new, finished job. Notify the user.
+        const message = `Job '${job.script_id}' has ${job.status}.`;
+        showToast(message, job.status);
+        notifiedJobIds.add(job.job_id);
+      } else if (!isDone) {
+        // If a job is 'running', remove it from the set
+        // in case it was re-run (this is optional)
+        notifiedJobIds.delete(job.job_id);
+      }
+    });
+  } catch (error) {
+    console.error("Job poller failed:", error);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const menuToggle = document.getElementById("menu-toggle");
   const controlsPanel = document.getElementById("controls");
@@ -47,6 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
         : "No file chosen";
   });
   loadExistingSites();
+  setInterval(checkJobStatus, 15000); // Check every 15 seconds
+  checkJobStatus(); // Check once on load
 });
 
 const importMediaForm = document.getElementById("import-media-form");

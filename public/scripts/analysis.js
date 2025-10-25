@@ -27,13 +27,51 @@ closeJobsBtn.addEventListener(
 );
 refreshJobsBtn.addEventListener("click", populateJobsList);
 
+const dynamicParamsContainer = document.getElementById(
+  "dynamic-script-parameters"
+);
+
 scriptSelect.addEventListener("change", () => {
+  // Clear old parameters
+  dynamicParamsContainer.innerHTML = "";
+
   const selectedScript = availableScripts.find(
     (s) => s.id === scriptSelect.value
   );
-  scriptDescription.textContent = selectedScript
-    ? selectedScript.description
-    : "";
+
+  if (selectedScript) {
+    scriptDescription.textContent = selectedScript.description;
+
+    // --- THIS IS THE NEW LOGIC ---
+    // Check if the manifest has parameters and build them
+    if (selectedScript.parameters && selectedScript.parameters.length > 0) {
+      selectedScript.parameters.forEach((param) => {
+        const paramWrapper = document.createElement("div");
+        paramWrapper.className = "form-group"; // For styling
+
+        const label = document.createElement("label");
+        label.htmlFor = `param-${param.name}`;
+        label.textContent = param.label;
+
+        const input = document.createElement("input");
+        input.type = param.type || "text"; // e.g., 'number'
+        if (input.type === "number") {
+          input.step = "any"; // Allows any decimal value
+        }
+        input.id = `param-${param.name}`;
+        input.name = param.name;
+        input.placeholder = param.placeholder || "";
+        input.value = param.default || "";
+        input.required = param.required || false;
+
+        paramWrapper.appendChild(label);
+        paramWrapper.appendChild(input);
+        dynamicParamsContainer.appendChild(paramWrapper);
+      });
+    }
+  } else {
+    scriptDescription.textContent = "";
+  }
 });
 
 analysisForm.addEventListener("submit", async (e) => {
@@ -51,11 +89,17 @@ analysisForm.addEventListener("submit", async (e) => {
     alert("Please select at least one input file.");
     return;
   }
-
+  // --- THIS IS THE NEW LOGIC ---
+  // Scrape parameters from the dynamic form
+  const parameters = {};
+  const paramInputs = dynamicParamsContainer.querySelectorAll("input");
+  paramInputs.forEach((input) => {
+    parameters[input.name] = input.value;
+  });
   const jobRequest = {
     script_id: scriptSelect.value,
     input_files: selectedFiles,
-    spot_names: [],
+    parameters: parameters,
   };
 
   try {
@@ -80,7 +124,6 @@ analysisForm.addEventListener("submit", async (e) => {
   }
 });
 
-
 async function openAnalysisModal() {
   try {
     const scriptsResponse = await fetch("/api/analysis/scripts");
@@ -96,14 +139,14 @@ async function openAnalysisModal() {
     });
     scriptDescription.textContent = "";
 
-    const filesResponse = await fetch("/api/analysis/external-files");
+    const filesResponse = await fetch("/api/analysis/audio-sources");
     if (!filesResponse.ok) throw new Error("Could not fetch external files.");
     const files = await filesResponse.json();
 
     fileSelectionContainer.innerHTML = "";
     if (files.length === 0) {
       fileSelectionContainer.innerHTML =
-        "<p>No external files found to analyze.</p>";
+        "<p>No audio source directories found.</p>";
     } else {
       files.forEach((file) => {
         const id = `file-check-${file.replace(/[^a-zA-Z0-9]/g, "")}`;
