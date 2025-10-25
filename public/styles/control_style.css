@@ -1,16 +1,19 @@
-
 #controls {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
   height: 100%;
-  background: #ffffff;
+  background-color: rgba(255, 255, 255, 0.5);
+
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px); /* For Safari support */
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px; /* Optional: Rounded corners */
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   z-index: 1000;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
+  overflow-y: auto;
 }
 
 #controls.open {
@@ -50,25 +53,24 @@
   vertical-align: middle;
 }
 
-
 .radios_div {
   display: flex;
   flex-direction: column;
   margin-left: 1rem;
 }
 
-#radio-label{
+#radio-label {
   margin-top: 1rem;
 }
 
-input[type="radio"] {
+#controls input[type="radio"] {
   margin-right: 0.5rem;
   cursor: pointer;
   width: 0.9rem;
   height: 0.9rem;
 }
 
-input[type="checkbox"] {
+#controls input[type="checkbox"] {
   margin-right: 0.25rem;
   margin-left: 0.5rem;
   width: 0.9rem;
@@ -82,9 +84,8 @@ input[type="checkbox"] {
   border-radius: 0.5rem;
   border: none;
   background-color: rgb(0, 255, 110);
-  cursor: pointer
+  cursor: pointer;
 }
-
 
 .div-label {
   margin-bottom: 0.3rem;

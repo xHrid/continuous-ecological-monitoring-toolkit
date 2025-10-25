@@ -10,6 +10,34 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* --- Toast Notification --- */
+#toast-notification {
+  position: fixed;
+  bottom: 20px;
+  right: -300px; /* Start off-screen */
+  width: 280px;
+  padding: 15px;
+  background-color: #333;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: right 0.5s ease-in-out;
+  z-index: 99999;
+  font-size: 0.95rem;
+}
+
+#toast-notification.show {
+  right: 20px; /* Slide in */
+}
+
+#toast-notification.success {
+  background-color: #28a745;
+}
+
+#toast-notification.failed {
+  background-color: #dc3545;
+}
+
 
 .leaflet-popup-content {
   min-width: 200px;
@@ -89,11 +117,9 @@
 .add-site-div {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Two columns */
-    gap: 5px; /* Space between buttons */
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #ccc;
+    gap: 10px;
     margin-top: 3.5rem;
+    width: fit-content;
 }
 
 .add-site-div button, .add-site-div .add_site, .add-site-div .control-button {
@@ -224,11 +250,8 @@
 }
 
 #analysis-file-selection input[type="checkbox"] {
-    margin-right: 12px;
     cursor: pointer;
-    width: 1.3em;
-    height: 1.3em;
-    accent-color: #007bff;
+    accent-color: #0cff49;
 }
 
 #analysis-file-selection label {
@@ -301,4 +324,40 @@
 
 .job-remove-btn:hover {
     background-color: #c9302c;
+}
+
+/* --- Minimal Scrollbar Styling --- */
+
+/* Works for WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1; 
+  border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1; 
+}
+
+#controls, 
+.popup-content,
+.modal-content, 
+.import-popup-content, 
+#spot-details-menu, 
+.external-data-list, 
+#analysis-file-selection, 
+#jobs-list, 
+.import-multi-select-box 
+{
+  scrollbar-width: thin;          
+  scrollbar-color: #defdff #ffffff; 
 }

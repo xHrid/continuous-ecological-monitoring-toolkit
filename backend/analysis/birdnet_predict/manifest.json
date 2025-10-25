@@ -1,0 +1,15 @@
+{
+    "id": "birdnet_predict",
+    "name": "Run BirdNet Predictions",
+    "description": "Analyzes raw audio files with BirdNET to generate a CSV file of all species detections. This must be run before you can generate any bird graphs.",
+    "parameters": [
+        {
+            "name": "min_confidence",
+            "label": "Minimum Confidence",
+            "type": "number",
+            "required": true,
+            "default": 0.5,
+            "placeholder": "e.g., 0.5"
+        }
+    ]
+}

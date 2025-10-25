@@ -4,8 +4,9 @@
 <head>
     <title>Continuous Ecological Monitoring Toolkit</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="/images/assets/favi.png">
+
     <link rel="stylesheet" href="./styles/control_style.css" />
     <link rel="stylesheet" href="./styles/spot_popup.css" />
     <link rel="stylesheet" href="./styles/style.css" />
@@ -14,55 +15,56 @@
     <link rel="stylesheet" href="./styles/add_site_section.css" />
     <link rel="stylesheet" href="./styles/import_media.css" />
     <link rel="stylesheet" href="./styles/external_data_viewer.css" />
-    <link rel="icon" type="image/png" href="favi.png">
 </head>
 
 <body>
-    <button id="menu-toggle">☰</button>
-
-    <div id="controls" class="open">
-
-        <div class="add-site-div">
-            <button class="add_site">Add Site</button>
-            <button id="import-media-btn" class="control-button">Import</button>
-            <button id="analysis-btn" class="control-button">Analysis</button>
-            <button id="jobs-btn" class="control-button">Jobs</button>
-        </div>
-
-        <div id="stratification-controls"></div>
-
-        <div class="control">
-            <div class="div-label">
-                Spots
-                <img src="./images/assets/spots-image.png" alt="Spots Icon" class="icon-inline" />
+    <main>
+        <button id="menu-toggle">☰</button>
+        <div id="controls" class="open">
+            <div class="add-site-div">
+                <button class="add_site">Add Site</button>
+                <button id="import-media-btn" class="control-button">Import</button>
+                <button id="analysis-btn" class="control-button">Analysis</button>
+                <button id="jobs-btn" class="control-button">Jobs</button>
             </div>
 
-            <button id="open-form">Add</button>
-            <label class="spot-toggle">
-                <input type="checkbox" id="display-spots" /> Show
-            </label>
-        </div>
-        <div class="control">
-            <div class="div-label">
-                Routes
-                <img src="./images/assets/trail.png" alt="Routes Icon" class="icon-inline" />
+            <div class="control">
+                <div class="div-label">
+                    Spots
+                    <img src="./images/assets/spots-image.png" alt="Spots Icon" class="icon-inline" />
+                </div>
+
+                <button id="open-form">Add</button>
+                <label class="spot-toggle">
+                    <input type="checkbox" id="display-spots" /> Show
+                </label>
             </div>
-            <button id="toggle-tracking">Record</button>
-            <label for="show-routes-toggle">
-                <input type="checkbox" id="show-routes-toggle" /> Show
-            </label>
+            <div class="control">
+                <div class="div-label">
+                    Routes
+                    <img src="./images/assets/trail.png" alt="Routes Icon" class="icon-inline" />
+                </div>
+                <button id="toggle-tracking">Record</button>
+                <label for="show-routes-toggle">
+                    <input type="checkbox" id="show-routes-toggle" /> Show
+                </label>
+            </div>
+            <div id="stratification-controls"></div>
         </div>
-    </div>
+        <div id="map"></div>
+        <div id="latlon"><label>Lat Long</label></div>
+        <div id="toast-notification"></div>
+    </main>
 
-    <div id="latlon"><label>Lat Long</label></div>
-
+    <!-- POP UPs -->
+    <!--Form 1-->
     <div id="popup-form" class="popup-overlay" style="display: none;">
         <div class="popup-content">
             <form id="spot-form">
                 <input type="text" name="name" placeholder="Spot Name" />
                 <input type="text" name="birds" placeholder="Birds Seen" />
                 <textarea name="description" placeholder="Description"></textarea>
-
+                
                 <div class="media-controls">
                     <label for="image-upload" class="custom-upload">
                         <img src="./images/assets/dslr-camera.png" alt="Routes Icon" class="camera-icon" />
@@ -81,6 +83,7 @@
         </div>
     </div>
 
+    <!--Form 2-->
     <div id="add-site-popup-form" class="popup-overlay" style="display: none;">
         <div class="popup-content">
             <form id="add-site-form">
@@ -111,6 +114,7 @@
         </div>
     </div>
 
+    <!--Form 3-->
     <div id="save-route-dialog" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -127,22 +131,23 @@
             </form>
         </div>
     </div>
-<div id="import-media-popup" class="import-popup-overlay" style="display: none;">
+
+    <!--Form 4-->
+    <div id="import-media-popup" class="import-popup-overlay" style="display: none;">
         <div class="import-popup-content">
             <form id="import-media-form" novalidate>
                 <h3>Import External Media</h3>
                 <p class="import-form-subtitle">Link external files to one or more existing spots.</p>
 
-                <label class="import-form-label" for="spot-selection-container">1. Select Spots:</label>
+                <span class="import-form-label">Select Spots:</span>
                 <div id="spot-selection-container" class="import-multi-select-box">
-                    </div>
+                </div>
 
-                <label class="import-form-label" for="external-file-input">2. Select Files:</label>
+                <label class="import-form-label" for="external-file-input">Select Files:</label>
                 <input type="file" id="external-file-input" name="files" class="import-file-input" multiple required>
 
-                <label class="import-form-label">3. File Destination:</label>
+                <span class="import-form-label">Save Location: </span>
                 <div class="import-path-preview-wrapper">
-                    <strong>Preview:</strong>
                     <p id="destination-path-preview">data/spots/{spot_name}/external_data/{date}</p>
                 </div>
 
@@ -154,67 +159,72 @@
         </div>
     </div>
 
-    <div id="map"></div>
-
+    <!--Form 5-->
     <div id="spot-details-menu">
         <button id="close-spot-details">x</button>
         <div id="spot-details-content">
         </div>
     </div>
 
+    <!--Form 6-->
     <div id="external-data-viewer" class="external-data-popup" style="display: none;">
         <div class="external-data-header">
             <h3>External Media</h3>
-            <button id="close-external-viewer" class="close-viewer-btn">×</button>
+            <button id="close-external-viewer" class="close-viewer-btn">x</button>
         </div>
         <div id="external-data-content" class="external-data-list">
-            </div>
+        </div>
     </div>
-    <!-- ANALYSIS SELECTION POPUP -->
+
+    <!--Form 7-->
     <div id="analysis-popup" class="import-popup-overlay" style="display: none;">
         <div class="import-popup-content">
             <form id="analysis-form">
                 <h3>Run Analysis</h3>
                 <p class="import-form-subtitle">Select an analysis script and provide input files.</p>
 
-                <label class="import-form-label">1. Select Analysis Script:</label>
+                <label class="import-form-label">Select Analysis Script:</label>
                 <select id="analysis-script-select" name="script_id" class="import-file-input" required></select>
                 <p id="analysis-description" style="font-size: 0.9rem; margin-top: 5px; color: #555;"></p>
-                <div id="custom-parameters-container" class="custom-params"></div>
+                <div id="dynamic-script-parameters"></div>
 
-                <h4 class="analysis-section-title">2. Select Input Files (WAV Audio)</h4>
+                <h4 class="analysis-section-title">Select Input Directories</h4>
                 <div id="analysis-file-selection" class="analysis-multi-select-box">
                     <!-- Files will be loaded here by JavaScript -->
                 </div>
 
                 <div class="import-form-actions">
                     <button type="submit" class="import-action-btn">Run Job</button>
-                    <button type="button" id="cancel-analysis-btn" class="import-secondary-action-btn">Cancel</button>
+                    <button type="button" id="cancel-analysis-btn" class="imporat-secondary-action-btn">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- JOBS VIEWER POPUP -->
+    <!--Form 8-->
     <div id="jobs-popup" class="import-popup-overlay" style="display: none;">
         <div class="import-popup-content" style="max-width: 800px;">
             <div class="external-data-header">
+                <span style="display: flex; gap: 1rem;">
                 <h3>Job Status</h3>
-                <button id="close-jobs-btn" class="close-viewer-btn">×</button>
+                <button id="refresh-jobs-btn" class="control-button" style="margin-bottom: 10px;">Refresh</button>
+                </span>
+                <button id="close-jobs-btn" class="close-viewer-btn">x</button>
             </div>
-            <button id="refresh-jobs-btn" class="control-button" style="margin-bottom: 10px;">Refresh</button>
             <div id="jobs-list" class="external-data-list">
                 <!-- Job statuses will be populated here -->
             </div>
         </div>
     </div>
+
+    <!-- JS -->
     <script src="./leaflet/leaflet.js"></script>
     <script src="./scripts/map.js"></script>
     <script src="./scripts/route.js"></script>
     <script src="./scripts/spots.js"></script>
-    <script src="./scripts/ui.js"></script>      
-    <script src="./scripts/analysis.js"></script>      
-    <script src="./scripts/sites.js"></script>      
+    <script src="./scripts/ui.js"></script>
+    <script src="./scripts/analysis.js"></script>
+    <script src="./scripts/sites.js"></script>
 </body>
 
 </html>

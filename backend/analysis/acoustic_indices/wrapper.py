@@ -2,6 +2,8 @@ import sys
 import json
 import subprocess
 from pathlib import Path
+import os            # <-- ADD THIS
+from glob import glob  # <-- ADD THIS
 
 def main():
     """
@@ -26,13 +28,36 @@ def main():
     core_script_path = script_dir / "core_script.py"
     noise_file_path = script_dir / "noise.wav" 
 
+    # --- NEW LOGIC: Expand directories into a file list ---
+    input_sources = payload['input_files']
+    expanded_input_files = []
+    
+    for source_path_str in input_sources:
+        # We need the full absolute path for glob to work correctly
+        full_source_path = str(Path(source_path_str).resolve()) 
+        
+        if os.path.isdir(full_source_path):
+            # It's a directory, find all .wav files inside, recursively
+            search_pattern = os.path.join(full_source_path, "**", "*.wav")
+            wav_files = glob(search_pattern, recursive=True)
+            expanded_input_files.extend(wav_files)
+        elif os.path.isfile(full_source_path) and full_source_path.lower().endswith('.wav'):
+            # It's a single file (for backward compatibility, though UI won't do this)
+            expanded_input_files.append(full_source_path)
+
+    if not expanded_input_files:
+        print("Error: No .wav files found in the selected directories.", file=sys.stderr)
+        sys.exit(1) # Fail fast
+    # --- END NEW LOGIC ---
+
+
     # --- Construct the Command ---
     command = [
         sys.executable,
         str(core_script_path),
         '--output-file', payload['output_file'],
         '--noise-file', str(noise_file_path),  
-        '--input-files', *payload['input_files']
+        '--input-files', *expanded_input_files # <-- USE THE EXPANDED LIST
     ]
 
     # Add optional parameters from the payload if they exist

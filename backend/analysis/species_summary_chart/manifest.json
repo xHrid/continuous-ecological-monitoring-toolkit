@@ -1,0 +1,31 @@
+{
+    "id": "species_summary_chart",
+    "name": "Generate Species Summary Chart",
+    "description": "Runs BirdNet predictions on selected audio files and then generates a stacked bar chart showing the count of each detected species, colored by confidence level.",
+    "parameters": [
+        {
+            "name": "min_confidence_birdnet",
+            "label": "BirdNet Min Confidence",
+            "type": "number",
+            "required": true,
+            "default": 0.5,
+            "placeholder": "e.g., 0.5"
+        },
+        {
+            "name": "min_confidence_chart",
+            "label": "Chart Min Confidence",
+            "type": "number",
+            "required": true,
+            "default": 0.3,
+            "placeholder": "e.g., 0.3"
+        },
+        {
+            "name": "species_per_plot",
+            "label": "Species per Plot",
+            "type": "number",
+            "required": false,
+            "default": 50,
+            "placeholder": "e.g., 50"
+        }
+    ]
+}

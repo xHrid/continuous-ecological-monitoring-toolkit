@@ -194,3 +194,29 @@ async def delete_job(job_id: str):
         
     shutil.rmtree(job_dir)
     return {"message": "Job deleted successfully."}
+
+
+@router.get("/analysis/audio-sources", tags=["Analysis"])
+async def get_audio_sources():
+    """
+    Finds all directories within data/spots that contain .wav files.
+    """
+    audio_sources = set()
+    spots_dir = DATA_DIR / "spots"
+    if not spots_dir.exists():
+        return []
+
+    for spot_folder in spots_dir.iterdir():
+        if not spot_folder.is_dir():
+            continue
+
+        for root, _, files in os.walk(spot_folder):
+            for file in files:
+                if file.lower().endswith('.wav'):
+                    # Add the directory path, relative to the project root
+                    dir_path = Path(root).relative_to(PROJECT_ROOT)
+                    audio_sources.add(str(dir_path))
+                    # We found a WAV file, no need to check other files in this dir
+                    break 
+
+    return sorted(list(audio_sources))
