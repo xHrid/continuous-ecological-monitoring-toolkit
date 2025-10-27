@@ -85,8 +85,8 @@ The app is designed for real-world fieldwork and supports two main working modes
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/xHrid/sanjay_van_monitor.git
-cd sanjay_van_monitor
+git clone https://github.com/xHrid/continuous-ecological-monitoring-toolkit.git
+cd continuous-ecological-monitoring-toolkit
 ```
 
 ### 2. Set Up the Environment
@@ -116,11 +116,17 @@ Then open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
 ### 5. (Optional) Enable Remote Access
 
+For this, we will need to set up ngrok on our system.
+
+What ngrok does is called tunneling. ngrok is a tool that creates a secure, encrypted tunnel between your local machine and a public URL.
+
+Installing ngrok itself requires a guide, which is readily available on the internet. Please follow one and install it.
+
 ```bash
-./ngrok http 8000
+ngrok http 8000
 ```
 
-Use the generated link to access your server from any device.
+Use the generated link to access your server from any device via internet.
 
 ---
 

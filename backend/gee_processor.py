@@ -84,7 +84,8 @@ def generate_stratification(kml_content: bytes, max_clusters: int, year: int = 2
         
         # --- MODIFICATION: Apply the LULC mask here ---
         s2_image = get_annual_embedding(aoi, year)
-        s2_image_aoi = lulc_mask_image(s2_image, aoi, year)
+        # s2_image_aoi = lulc_mask_image(s2_image, aoi, year)
+        s2_image_aoi = s2_image.clip(aoi)
         
         training_data = s2_image_aoi.sample(region=aoi, scale=10, numPixels=1000)
         bounds_ee = aoi.bounds()

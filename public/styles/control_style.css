@@ -1,10 +1,10 @@
 #controls {
   position: fixed;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.3);
 
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px); /* For Safari support */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); /* For Safari support */
 
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px; /* Optional: Rounded corners */
